@@ -2,30 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
-{
 
+public class FlockSpawner : MonoBehaviour
+{
     public enum GizmoType { Never, SelectedOnly, Always }
+
+    public BoidSettings Settings;
 
     public Boid prefab;
     public float spawnRadius = 10;
     public int spawnCount = 10;
-    public Color colour;
     public GizmoType showSpawnRegion;
 
-    void Awake()
+    void Start()
     {
-        for (int i = 0; i < spawnCount; i++)
-        {
-            Vector3 pos = transform.position + Random.insideUnitSphere * spawnRadius;
-            Boid boid = Instantiate(prefab);
-            boid.transform.position = pos;
-            boid.transform.forward = Random.insideUnitSphere;
-
-            boid.SetColour(colour);
-        }
+        Spawn();
     }
-
+    public void Spawn()
+    {
+        BoidManager.Instance.RegisterFlock(this, prefab, spawnRadius, spawnCount, Settings);
+    }
     private void OnDrawGizmos()
     {
         if (showSpawnRegion == GizmoType.Always)
@@ -44,8 +40,7 @@ public class Spawner : MonoBehaviour
 
     void DrawGizmos()
     {
-
-        Gizmos.color = new Color(colour.r, colour.g, colour.b, 0.3f);
+        Gizmos.color = Color.cyan;
         Gizmos.DrawSphere(transform.position, spawnRadius);
     }
 

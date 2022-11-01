@@ -5,7 +5,9 @@ using UnityEngine;
 public class CharacterController : MonoBehaviour
 {
     [SerializeField]
-    private float moveSpeed = 3f;
+    private float additionalMoveSpeed = 3f;
+    [SerializeField]
+    private float additionalMovingRotateSpeed = 1.5f;
     [SerializeField]
     private float rotationSpeed = 5f;
 
@@ -34,14 +36,19 @@ public class CharacterController : MonoBehaviour
     {
         SetAnimParameters();
 
+        rb.velocity += transform.forward * additionalMoveSpeed * moveInput.x;
         rb.MoveRotation(rb.rotation * Quaternion.Euler(0, rotationValue * rotationSpeed, 0));
     }
     void CheckInput()
     {
         moveInput.x = Input.GetAxis("Vertical");
         moveInput.z = Input.GetAxis("Horizontal");
-
-        rotationValue = Mathf.Atan2(moveInput.z, moveInput.x);
+        if (moveInput.x < 0)
+            rotationValue = 0;
+        else if (moveInput.x < 0.3)
+            rotationValue = Mathf.Atan2(moveInput.z, moveInput.x);
+        else
+            rotationValue = Mathf.Atan2(moveInput.z, moveInput.x) * additionalMovingRotateSpeed;
     }
     void SetAnimParameters()
     {

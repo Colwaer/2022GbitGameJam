@@ -2,62 +2,119 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoidManager : MonoBehaviour
+public class BoidManager : Singleton<BoidManager>
 {
+    List<Boid> usedBoid = new List<Boid>();
+    List<Boid> unusedBoid = new List<Boid>();
+
+
 
     const int threadGroupSize = 1024;
 
     public BoidSettings settings;
     public ComputeShader compute;
-    Boid[] boids;
+
+    Dictionary<FlockSpawner, Boid[]> boidList = new Dictionary<FlockSpawner, Boid[]>();
+
 
     void Start()
     {
-        boids = FindObjectsOfType<Boid>();
-        foreach (Boid b in boids)
-        {
-            b.Initialize(settings, null);
-        }
 
     }
+
+
 
     void Update()
     {
-        if (boids != null)
+        foreach (var keyValuePair in boidList)
         {
-            int numBoids = boids.Length;
-            var boidData = new BoidData[numBoids];
-
-            for (int i = 0; i < boids.Length; i++)
+            var boids = keyValuePair.Value;
+            if (boids != null)
             {
-                boidData[i].position = boids[i].position;
-                boidData[i].direction = boids[i].forward;
+                int numBoids = boids.Length;
+                var boidData = new BoidData[numBoids];
+
+                for (int i = 0; i < boids.Length; i++)
+                {
+                    boidData[i].position = boids[i].position;
+                    boidData[i].direction = boids[i].forward;
+                }
+
+                var boidBuffer = new ComputeBuffer(numBoids, BoidData.Size);
+                boidBuffer.SetData(boidData);
+
+                compute.SetBuffer(0, "boids", boidBuffer);
+                compute.SetInt("numBoids", boids.Length);
+                compute.SetFloat("viewRadius", settings.perceptionRadius);
+                compute.SetFloat("avoidRadius", settings.avoidanceRadius);
+
+                int threadGroups = Mathf.CeilToInt(numBoids / (float)threadGroupSize);
+                compute.Dispatch(0, threadGroups, 1, 1);
+                boidBuffer.GetData(boidData);
+
+                for (int i = 0; i < boids.Length; i++)
+                {
+                    boids[i].avgFlockHeading = boidData[i].flockHeading;
+                    boids[i].centreOfFlockmates = boidData[i].flockCentre;
+                    boids[i].avgAvoidanceHeading = boidData[i].avoidanceHeading;
+                    boids[i].numPerceivedFlockmates = boidData[i].numFlockmates;
+
+                    boids[i].UpdateBoid();
+                }
+                boidBuffer.Release();
             }
+        }
+        
+    }
 
-            var boidBuffer = new ComputeBuffer(numBoids, BoidData.Size);
-            boidBuffer.SetData(boidData);
+    public void RegisterFlock(FlockSpawner spawner, Boid prefab, float spawnRadius, int spawnCount, BoidSettings settings)
+    {
+        Boid[] boids = new Boid[spawnCount];
 
-            compute.SetBuffer(0, "boids", boidBuffer);
-            compute.SetInt("numBoids", boids.Length);
-            compute.SetFloat("viewRadius", settings.perceptionRadius);
-            compute.SetFloat("avoidRadius", settings.avoidanceRadius);
+        for (int i = 0; i < spawnCount; i++)
+        {
+            Vector3 pos = transform.position + Random.insideUnitSphere * spawnRadius;
+            Boid boid = Get(prefab, pos, Random.insideUnitSphere);
+            boid.Initialize(settings, null);
+            boids[i] = boid;
+            //boid.SetColour(colour);
+        }
+        boidList[spawner] = boids;
+    }
 
-            int threadGroups = Mathf.CeilToInt(numBoids / (float)threadGroupSize);
-            compute.Dispatch(0, threadGroups, 1, 1);
-            boidBuffer.GetData(boidData);
 
-            for (int i = 0; i < boids.Length; i++)
-            {
-                boids[i].avgFlockHeading = boidData[i].flockHeading;
-                boids[i].centreOfFlockmates = boidData[i].flockCentre;
-                boids[i].avgAvoidanceHeading = boidData[i].avoidanceHeading;
-                boids[i].numPerceivedFlockmates = boidData[i].numFlockmates;
 
-                boids[i].UpdateBoid();
-            }
-            boidBuffer.Release();
+
+
+
+    #region 对象池
+    Boid Get(Boid prefab, Vector3 pos, Vector3 forward)
+    {
+        if (unusedBoid.Count == 0)
+        {
+            var obj = Instantiate(prefab, pos, Quaternion.identity);
+            obj.transform.forward = forward;
+            usedBoid.Add(obj);
+            return obj;
+        }
+        else
+        {
+            var obj = unusedBoid[unusedBoid.Count - 1];
+            obj.gameObject.SetActive(true);
+            obj.transform.position = pos;
+            obj.transform.forward = forward;
+            usedBoid.Add(obj);
+            unusedBoid.RemoveAt(unusedBoid.Count - 1);
+            return obj;
         }
     }
+    void ReturnToPool(Boid obj)
+    {
+        obj.gameObject.SetActive(false);
+        unusedBoid.Add(obj);
+        usedBoid.Remove(obj);
+    }
+    #endregion
 
     public struct BoidData
     {
@@ -76,4 +133,6 @@ public class BoidManager : MonoBehaviour
             }
         }
     }
+
+
 }

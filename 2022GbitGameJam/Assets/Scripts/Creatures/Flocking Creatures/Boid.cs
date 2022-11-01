@@ -12,6 +12,7 @@ public class Boid : MonoBehaviour {
     [HideInInspector]
     public Vector3 forward;
     Vector3 velocity;
+    bool dead = false;
 
     // To update:
     Vector3 acceleration;
@@ -28,6 +29,9 @@ public class Boid : MonoBehaviour {
     Material material;
     Transform cachedTransform;
     Transform target;
+
+
+
 
     void Awake () {
         material = transform.GetComponentInChildren<SkinnedMeshRenderer>().material;
