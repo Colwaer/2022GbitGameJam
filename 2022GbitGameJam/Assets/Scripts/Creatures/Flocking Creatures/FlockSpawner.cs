@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class FlockSpawner : MonoBehaviour
 {
+    static int spawnerCount = 0;
+
     public enum GizmoType { Never, SelectedOnly, Always }
 
     public BoidSettings Settings;
@@ -14,13 +16,21 @@ public class FlockSpawner : MonoBehaviour
     public int spawnCount = 10;
     public GizmoType showSpawnRegion;
 
+    // state
+    private int spawnerIndex;
+    private int aliveCount;
+
+    Boid[] boids;
+
     void Start()
     {
+        spawnerIndex = spawnerCount++;
         Spawn();
     }
     public void Spawn()
     {
-        BoidManager.Instance.RegisterFlock(this, prefab, spawnRadius, spawnCount, Settings);
+        boids = BoidManager.Instance.RegisterFlock(this, prefab, spawnRadius, spawnCount, Settings);
+        aliveCount = boids.Length;
     }
     private void OnDrawGizmos()
     {
@@ -37,11 +47,24 @@ public class FlockSpawner : MonoBehaviour
             DrawGizmos();
         }
     }
-
+    public void OnBoidDie()
+    {
+        aliveCount--;
+    }
     void DrawGizmos()
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawSphere(transform.position, spawnRadius);
     }
-
+    private void OnTriggerExit(Collider collision)
+    {
+        if (collision.CompareTag("FlockBoid"))
+        {
+            var boid = collision.GetComponent<Boid>();
+            if (boid != null && boid.spawner == this)
+            {
+                boid.Die();
+            }
+        }
+    }
 }

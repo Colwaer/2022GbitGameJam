@@ -67,19 +67,21 @@ public class BoidManager : Singleton<BoidManager>
         
     }
 
-    public void RegisterFlock(FlockSpawner spawner, Boid prefab, float spawnRadius, int spawnCount, BoidSettings settings)
+    public Boid[] RegisterFlock(FlockSpawner spawner, Boid prefab, float spawnRadius, int spawnCount, 
+        BoidSettings settings)
     {
         Boid[] boids = new Boid[spawnCount];
 
         for (int i = 0; i < spawnCount; i++)
         {
-            Vector3 pos = transform.position + Random.insideUnitSphere * spawnRadius;
+            Vector3 pos = spawner.transform.position + Random.insideUnitSphere * spawnRadius;
             Boid boid = Get(prefab, pos, Random.insideUnitSphere);
-            boid.Initialize(settings, null);
+            boid.Initialize(spawner, settings, null, i);
             boids[i] = boid;
             //boid.SetColour(colour);
         }
         boidList[spawner] = boids;
+        return boids;
     }
 
 

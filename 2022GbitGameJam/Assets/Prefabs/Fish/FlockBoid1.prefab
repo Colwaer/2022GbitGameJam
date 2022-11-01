@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6349151928875962174}
   - component: {fileID: 2931604500597588581}
+  - component: {fileID: 8619606291602757030}
   m_Layer: 8
   m_Name: FlockBoid1
-  m_TagString: Untagged
+  m_TagString: FlockBoid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,10 +48,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0, z: 0}
   forward: {x: 0, y: 0, z: 0}
+  arrayIndex: 0
+  spawner: {fileID: 0}
   avgFlockHeading: {x: 0, y: 0, z: 0}
   avgAvoidanceHeading: {x: 0, y: 0, z: 0}
   centreOfFlockmates: {x: 0, y: 0, z: 0}
   numPerceivedFlockmates: 0
+--- !u!65 &8619606291602757030
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4115476135907606149}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.116904736, y: 0.26846027, z: 0.6195545}
+  m_Center: {x: -0.0037238598, y: -0.049253464, z: 0.056035995}
 --- !u!1001 &527802126427714957
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,8 +11,13 @@ public class Boid : MonoBehaviour {
     public Vector3 position;
     [HideInInspector]
     public Vector3 forward;
+    [HideInInspector]
+    public int arrayIndex;
     Vector3 velocity;
+    [HideInInspector]
+    public FlockSpawner spawner;
     bool dead = false;
+    
 
     // To update:
     Vector3 acceleration;
@@ -38,9 +43,12 @@ public class Boid : MonoBehaviour {
         cachedTransform = transform;
     }
 
-    public void Initialize (BoidSettings settings, Transform target) {
+    public void Initialize (FlockSpawner spawner, BoidSettings settings, Transform target, int arrayIndex) 
+    {
+        this.spawner = spawner;
         this.target = target;
         this.settings = settings;
+        this.arrayIndex = arrayIndex;
 
         position = cachedTransform.position;
         forward = cachedTransform.forward;
@@ -54,7 +62,15 @@ public class Boid : MonoBehaviour {
             material.color = col;
         }
     }
+    public void Die()
+    {
+        dead = true;
+        gameObject.SetActive(false);
+    }
 
+
+
+    #region Flock Algorithm
     public void UpdateBoid () 
     {
         Vector3 acceleration = Vector3.zero;
@@ -128,5 +144,5 @@ public class Boid : MonoBehaviour {
         Vector3 v = vector.normalized * settings.maxSpeed - velocity;
         return Vector3.ClampMagnitude (v, settings.maxSteerForce);
     }
-
+    #endregion
 }
