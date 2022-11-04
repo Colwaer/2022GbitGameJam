@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TsukimiExample_TsukimiURPStandard_v1.1
+  m_Shader: {fileID: 4800000, guid: 45765e2267826bb4189818c4047b1eeb, type: 3}
+  m_ValidKeywords:
+  - _REFRACTION_COLOR
+  - _SCREEN_COLOR
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap1:
+        m_Texture: {fileID: 2800000, guid: c261c0cb01897574d81015746e271dd5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap2:
+        m_Texture: {fileID: 2800000, guid: c261c0cb01897574d81015746e271dd5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlowMap:
+        m_Texture: {fileID: 2800000, guid: fb541b768d2577249ba5b87ff380ee79, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTexture:
+        m_Texture: {fileID: 2800000, guid: 0dc8f0c2b4a762b40a3f4893d95e8032, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterRampTexture:
+        m_Texture: {fileID: 2800000, guid: 8653ccfcfa293e74fbaa085cd4f48a72, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _: 1
+    - _A: 1
+    - _AlphaScale: 1
+    - _B: 1
+    - _BumpBlend: 0.5
+    - _BumpScale1: 0.25
+    - _BumpScale2: 0.4
+    - _DepthMultiplier: 1
+    - _Distortion: 0.669
+    - _FlowSpeed: 5
+    - _FlowStrength: 0.7
+    - _NoiseIntensity: 0.019
+    - _UV1Tiling: 0.5
+    - _UV2Tiling: 0.5
+    - _WaterHeightThreshold: 0
+    - _WaterUV1Tiling: 0.4
+    - _WaterUV2Tiling: 0.4
+    - _WaterWorldScale: 1
+    - _WaterWorldUVScale: 10
+    - _WaveAmplitude: 0.9
+    - _WaveLength: 5
+    - _WaveScale: 9.2
+    - _WaveSpeed: 0.001
+    - _WaveSteepness: 0.1
+    - _WindDirection: 0
+    - _WindSpeed: 0.1
+    m_Colors:
+    - _Color: {r: 0.55143565, g: 1, b: 1, a: 1}
+    - _UVAnimator: {r: 0.5, g: 1, b: 1, a: 0.5}
+    - _WaterUVAnimator: {r: 0.5, g: 1, b: 2, a: 0.5}
+    - _WaveA: {r: 0.8, g: 8, b: 0, a: 0}
+    - _WaveB: {r: 0.8, g: 5, b: 0.3, a: 45}
+    - _WaveC: {r: 0.4, g: 2, b: 0.5, a: 90}
+  m_BuildTextureStacks: []
