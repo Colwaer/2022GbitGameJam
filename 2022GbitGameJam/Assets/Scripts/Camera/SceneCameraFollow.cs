@@ -11,7 +11,7 @@ public class SceneCameraFollow : MonoBehaviour
         playerTransform = GameManager.Instance.Player.transform;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         var originPos = transform.position;
         originPos.x = playerTransform.position.x;

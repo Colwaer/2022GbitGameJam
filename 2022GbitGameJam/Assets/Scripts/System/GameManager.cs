@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    CharacterController characterController;
-    public CharacterController Player => characterController;
+    PlayerController characterController;
+    public PlayerController Player => characterController;
     protected override void Awake()
     {
         base.Awake();
@@ -17,6 +17,6 @@ public class GameManager : Singleton<GameManager>
     }
     void GetReference()
     {
-        characterController = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController>();
+        characterController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
 }
